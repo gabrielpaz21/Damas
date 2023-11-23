@@ -178,6 +178,32 @@ class Panel extends JPanel {
             return j;
         }
 
+        public void updateButton(Button button, ImageIcon image, Button playedButton) {
+            if (button != playedButton) {
+                button.setIcon(new ImageIcon(image.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
+                button.removeActionListener(button);
+            } else {
+                removeActionListener(playedButton);
+                addFocusListener(playedButton);
+            }
+        }
+
+        public void updateButtons(ArrayList<Integer> positions, ImageIcon image, Button playedButton) {
+            for (int x = 0; x < positions.size(); x += 2) {
+                Button button = getButton(positions.get(x), positions.get(x + 1));
+                updateButton(button, image, playedButton);
+            }
+        }
+
+        public void updateButtons(ArrayList<Integer> positions, ImageIcon image) {
+            for (int x = 0; x < positions.size(); x += 2) {
+                Button button = getButton(positions.get(x), positions.get(x + 1));
+                button.setIcon(new ImageIcon(image.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
+                button.removeFocusListener(button);
+                button.addActionListener(button);
+            }
+        }
+
         @Override
         public void focusGained(FocusEvent e) {
 
@@ -288,27 +314,9 @@ class Panel extends JPanel {
 
             buttonSelected.setIcon(new ImageIcon(blackSpaceImage.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
 
-            for (int x = 0; x < positionsToMove.size(); x += 2) {
-                Button button = getButton(positionsToMove.get(x), positionsToMove.get(x + 1));
-                if (button != playedButton) {
-                    button.setIcon(new ImageIcon(blackSpaceImage.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
-                    button.removeActionListener(button);
-                } else {
-                    removeActionListener(playedButton);
-                    addFocusListener(playedButton);
-                }
-            }
+            updateButtons(positionsToMove, blackSpaceImage, playedButton);
 
-            for (int x = 0; x < potionsToEat.size(); x += 2) {
-                Button button = getButton(potionsToEat.get(x), potionsToEat.get(x + 1));
-                if (button != playedButton) {
-                    button.setIcon(new ImageIcon(blackSpaceImage.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
-                    button.removeActionListener(button);
-                } else {
-                    removeActionListener(playedButton);
-                    addFocusListener(playedButton);
-                }
-            }
+            updateButtons(potionsToEat, blackSpaceImage, playedButton);
 
             for (int x = 0; x < potionsMeals.size(); x += 2) {
                 Button button = getButton(potionsMeals.get(x), potionsMeals.get(x + 1));
