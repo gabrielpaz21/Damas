@@ -13,8 +13,7 @@ class Panel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int BOARD_WIDTH = Board.BOARD_WIDTH;
     private static final int BOARD_HEIGHT = Board.BOARD_HEIGHT;
-    private Button buttonSelected, playedButton;
-    private GridBagConstraints gbc;
+    private Button buttonSelected;
     private boolean turn = false;
     private ArrayList<Integer> positionsToMove = new ArrayList<>(),
             potionsToEat = new ArrayList<>(),
@@ -40,12 +39,12 @@ class Panel extends JPanel {
     public Panel() {
         setLayout(new GridBagLayout());
         addButtons();
-        new Board();
+        Board.getInstance();
     }
 
     public GridBagConstraints attributeButton(int i, int j) {
 
-        gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = j;
         gbc.gridy = i;
         gbc.gridwidth = 1;
@@ -57,7 +56,7 @@ class Panel extends JPanel {
         return gbc;
     }
 
-    public Button getButton(int i, int j) {
+    private Button getButton(int i, int j) {
 
         int aux = 0;
         Button button = null;
@@ -66,7 +65,7 @@ class Panel extends JPanel {
         for (int x = 0; x < BOARD_WIDTH && pass; x++) {
             for (int y = 0; y < BOARD_HEIGHT && pass; y++) {
 
-                if (x == i && y == j && pass) {
+                if (x == i && y == j) {
                     button = (Button) getComponent(aux);
                     pass = false;
                 }
@@ -120,7 +119,7 @@ class Panel extends JPanel {
         boolean validation = true;
         int coordinatesAdded = button.getI() + button.getJ();
         final boolean isEven = coordinatesAdded % 2 == 0;
-        final boolean isNull = Board.getPieza(button.getI(), button.getJ()) == null;
+        final boolean isNull = Board.getPiece(button.getI(), button.getJ()) == null;
 
 
         if (isEven) {
@@ -190,7 +189,7 @@ class Panel extends JPanel {
                 return;
             }
 
-            Piece pieceSelected = Board.getPieza(buttonSelected.getI(), buttonSelected.getJ());
+            Piece pieceSelected = Board.getPiece(buttonSelected.getI(), buttonSelected.getJ());
 
             if (Board.checkShiftAlignment(turn, pieceSelected.getColor())) {
                 return;
@@ -243,7 +242,7 @@ class Panel extends JPanel {
                 return;
             }
 
-            Piece pieceDeselected = Board.getPieza(buttonSelected.getI(), buttonSelected.getJ());
+            Piece pieceDeselected = Board.getPiece(buttonSelected.getI(), buttonSelected.getJ());
 
             if (Board.checkShiftAlignment(turn, pieceDeselected.getColor())) {
 
@@ -269,8 +268,8 @@ class Panel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            playedButton = (Button) e.getSource();
-            Piece pieceSelected = Board.getPieza(buttonSelected.getI(), buttonSelected.getJ());
+            Button playedButton = (Button) e.getSource();
+            Piece pieceSelected = Board.getPiece(buttonSelected.getI(), buttonSelected.getJ());
             positionsToMove = pieceSelected.potionsToMove();
             potionsToEat = pieceSelected.PotionsToEat();
 
@@ -315,7 +314,7 @@ class Panel extends JPanel {
                 Button button = getButton(potionsMeals.get(x), potionsMeals.get(x + 1));
                 button.setIcon(new ImageIcon(blackSpaceImage.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH)));
                 button.removeFocusListener(button);
-                Board.cancel(Board.getPieza(potionsMeals.get(x), potionsMeals.get(x + 1)));
+                Board.cancel(Board.getPiece(potionsMeals.get(x), potionsMeals.get(x + 1)));
             }
 
         }

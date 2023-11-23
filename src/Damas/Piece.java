@@ -29,7 +29,9 @@ public abstract class Piece {
 		return color;
 	}
 
+	/*
 	public abstract void showFeatures();
+	*/
 
 	public abstract void move(int i, int j);
 
